@@ -5,29 +5,38 @@ import './popup.css'; // Import the CSS file
 const Popup = ({ isOpen, closePopup }) => {
   if (!isOpen) return null;
 
-  const bscAddress = '0xd232c41b4df8ee31551ad493eebfebdeeaa867a5'; // BSC Address for all supported coins
+  // Cryptocurrency addresses
+  const addresses = {
+    BTC: 'bc1qatl7z86yvxnya0yre2hhh5thm9qs6hlgslltgv',  // BTC Address
+    ETH: '0x6d59fD29c048e22022bbAB5df74b655bb7e69dD5', // ETH Address
+    BNB: 'bnb1xetwu9geqh6mra77fcs3tpt7q8xnhffh8cxday', // BNB Address
+  };
 
+  const [selectedCrypto, setSelectedCrypto] = useState('BTC');
   const [copiedAddress, setCopiedAddress] = useState('');
   const [copyButtonText, setCopyButtonText] = useState('Copy');
 
   const handleCopy = (address) => {
     navigator.clipboard.writeText(address).then(() => {
-      setCopiedAddress(address); // Set the copied address
-      setCopyButtonText('Copied!'); // Update button text to 'Copied!'
+      setCopiedAddress(address);
+      setCopyButtonText('Copied!');
       setTimeout(() => {
-        setCopiedAddress(''); // Clear the copied address after 2 seconds
-        setCopyButtonText('Copy'); // Reset button text to 'Copy'
+        setCopiedAddress('');
+        setCopyButtonText('Copy');
       }, 2000);
     });
   };
 
-  // Supported cryptocurrencies logos
+  // Supported cryptocurrencies logos and names
   const cryptoLogos = [
-    'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
-    'https://cryptologos.cc/logos/ethereum-eth-logo.png',
-    'https://cryptologos.cc/logos/binance-coin-bnb-logo.png',
-    'https://cryptologos.cc/logos/tether-usdt-logo.png',
+    { logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png', name: 'BTC' },
+    { logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', name: 'ETH' },
+    { logo: 'https://cryptologos.cc/logos/binance-coin-bnb-logo.png', name: 'BNB' },
   ];
+
+  const handleSelectCrypto = (crypto) => {
+    setSelectedCrypto(crypto);
+  };
 
   return (
     <div className="popup-overlay" onClick={closePopup}>
@@ -56,11 +65,40 @@ const Popup = ({ isOpen, closePopup }) => {
 
         <h3>Donate Now</h3>
         <p>Scan the QR code or copy the address to donate using your preferred crypto:</p>
+
+        {/* Custom Dropdown to choose cryptocurrency */}
+        <div className="crypto-selector">
+          <label htmlFor="crypto">Select Cryptocurrency: </label>
+          <div className="dropdown">
+            <button className="dropdown-btn">
+              <img
+                src={cryptoLogos.find((crypto) => crypto.name === selectedCrypto)?.logo}
+                alt={selectedCrypto}
+                className="coin-icon"
+              />
+              {selectedCrypto}
+            </button>
+            <div className="dropdown-content">
+              {cryptoLogos.map((crypto) => (
+                <div
+                  key={crypto.name}
+                  className="dropdown-item"
+                  onClick={() => handleSelectCrypto(crypto.name)}
+                >
+                  <img src={crypto.logo} alt={crypto.name} className="coin-icon" />
+                  {crypto.name}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
         <div className="qr-box">
           <div className="coin-box">
-            <QRCodeCanvas value={bscAddress} size={150} />
-            <p>{bscAddress}</p>
-            <button className="copy-btn" onClick={() => handleCopy(bscAddress)}>
+            {/* QR Code for selected cryptocurrency */}
+            <QRCodeCanvas value={addresses[selectedCrypto]} size={150} />
+            <p>{addresses[selectedCrypto]}</p>
+            <button className="copy-btn" onClick={() => handleCopy(addresses[selectedCrypto])}>
               <svg
                 width="24"
                 height="24"
@@ -86,7 +124,7 @@ const Popup = ({ isOpen, closePopup }) => {
           <div className="logos-row">
             {cryptoLogos.map((logo, index) => (
               <div key={index} className="crypto-logo">
-                <img src={logo} alt="crypto-logo" className="crypto-logo-img" />
+                <img src={logo.logo} alt="crypto-logo" className="crypto-logo-img" />
               </div>
             ))}
           </div>
