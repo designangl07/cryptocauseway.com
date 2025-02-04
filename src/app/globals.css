@@ -64,17 +64,15 @@ h1
 h2, h3
 {
   font-family: "industry", sans-serif;
-  font-weight: 600;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
   color: #3D4457;
   letter-spacing: 2px;
 }
 h4 {
   font-family: "industry", sans-serif;
-  font-weight: 600;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 500;
   color:#3d4457;
   letter-spacing: 2px;
 }

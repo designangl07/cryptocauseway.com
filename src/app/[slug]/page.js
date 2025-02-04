@@ -55,7 +55,7 @@ export default async function BlogPostPage({ params }) {
         <div>
         {/* Hero Section */}
         <div className='hero-inner'>
-        <Container className="blog"><h1>{post.title.rendered}</h1></Container>
+        <Container className="blog"><h1 className="text-center">{post.title.rendered}</h1></Container>
         </div>
         <main className="blog">
             <Container>
