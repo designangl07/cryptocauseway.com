@@ -9,7 +9,7 @@ const Popup = ({ isOpen, closePopup }) => {
   const addresses = {
     BTC: 'bc1qatl7z86yvxnya0yre2hhh5thm9qs6hlgslltgv',  // BTC Address
     ETH: '0x6d59fD29c048e22022bbAB5df74b655bb7e69dD5', // ETH Address
-    BNB: 'bnb1xetwu9geqh6mra77fcs3tpt7q8xnhffh8cxday', // BNB Address
+    BNB: '0xd232c41b4df8ee31551ad493eebfebdeeaa867a5', // BNB Address
   };
 
   const [selectedCrypto, setSelectedCrypto] = useState('BTC');
