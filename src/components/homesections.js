@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import Popup from './popup';
 import FreeServiceSection from '@/components/FreeServiceSection';
+import Link from 'next/link';
 
 export default function Homesections() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -28,7 +29,7 @@ export default function Homesections() {
         <Container>
           <Row className="justify-content-center">
             <Col xs={12} md={6} className="d-flex justify-content-center justify-content-md-end mb-3 mb-md-0">
-              <Button href="#donators" className="btn">Apply for No-Cost Services</Button>
+            <Link href="/contact" className="btn">Apply for No-Cost Services</Link>
             </Col>
             <Col xs={12} md={6} className="d-flex justify-content-center justify-content-md-start">
               <button onClick={openPopup} className="btn nav-link">Donate Now</button>
@@ -66,7 +67,7 @@ export default function Homesections() {
               <h4>Get more visibility and grow your crypto project with our free marketing and website services.</h4>
               <p className="para">We believe in supporting new cryptocurrency projects by providing free marketing services to help you grow your community and increase visibility. Whether it’s designing a landing page or creating social media posts, we’re here to help you attract more visitors and spread the word about your coin.
               Get the boost you need, at no cost to you, and encourage more people to join your crypto movement.</p>
-              <Button href="#get-started">Get Started</Button>
+              <Link href="/crypto-Launchers" className="btn">Get Started</Link>
             </Col>
             <Col md={6} className="text-center">
               <img src="/assets/crypto-project.svg" alt="Crypto Project" className="img-fluid" />

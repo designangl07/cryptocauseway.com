@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 const FreeServicesSection = () => {
   const [selectedHeading, setSelectedHeading] = useState('charity');
@@ -43,6 +44,7 @@ const FreeServicesSection = () => {
           ))}
         </div>
         <p className="mt-4 serivces">{selectedService.content}</p>
+        <Link href="/contact" className="btn">Apply for No-Cost Services</Link>
       </div>
       <div className="col-lg-6">
         <img
