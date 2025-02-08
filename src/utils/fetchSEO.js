@@ -1,7 +1,7 @@
 export async function fetchSEO(slug, type = "pages") {
     // Construct API URL dynamically based on the type and slug
     const apiUrl = `${process.env.NEXT_PUBLIC_WORDPRESS_API}/wp/v2/${type}?slug=${slug}`;
-    console.log("Fetching SEO from URL:", apiUrl); // Debug log to check API URL
+    //console.log("Fetching SEO from URL:", apiUrl); // Debug log to check API URL
 
     try {
         const response = await fetch(apiUrl, {
@@ -13,21 +13,21 @@ export async function fetchSEO(slug, type = "pages") {
 
         // Check if the response status is 404 (page not found)
         if (response.status === 404) {
-            console.error(`Page with slug ${slug} not found (404 error)`);
+            //console.error(`Page with slug ${slug} not found (404 error)`);
             return null; // Return null if it's a 404 error
         }
 
         if (!response.ok) {
-            console.error(`Failed to fetch SEO data for slug: ${slug}`);
+            //console.error(`Failed to fetch SEO data for slug: ${slug}`);
             return null; // Return null if the response is not okay
         }
 
         const data = await response.json();
-        console.log("Fetched SEO data:", data); // Debug log to check fetched data
+        //console.log("Fetched SEO data:", data); // Debug log to check fetched data
 
         // Check if data is an empty array or no valid SEO data found
         if (!data || data.length === 0) {
-            console.warn(`No SEO data found for slug: ${slug}`); // Log a warning instead of an error
+            //console.warn(`No SEO data found for slug: ${slug}`); // Log a warning instead of an error
             return null; // Return null if no valid data is found for the given slug
         }
 
@@ -39,7 +39,7 @@ export async function fetchSEO(slug, type = "pages") {
             ogImage: post.rank_math_og_content_image || "/default-image.jpg", // Use rank math OG image, fall back to default
         };
     } catch (error) {
-        console.error("Error fetching SEO data:", error); // Log any unexpected errors
+        //console.error("Error fetching SEO data:", error); // Log any unexpected errors
         return null; // Return null in case of an error
     }
 }

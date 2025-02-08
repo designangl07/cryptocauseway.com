@@ -47,7 +47,7 @@ export async function fetchPost(slug) {
     });
 
     if (!response.ok) {
-        console.error("Failed to fetch post.");
+        //console.error("Failed to fetch post.");
         return null;
     }
 
