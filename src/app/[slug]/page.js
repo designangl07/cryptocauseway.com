@@ -3,9 +3,25 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 
 // Fetch SEO data for individual blog post
 export async function generateMetadata({ params }) {
-    const seo = await fetchSEO(params.slug, "posts"); // Fetch SEO data for the post
-    console.log("SEO Data for Blog Post:", seo); // Debug log to check if SEO data is fetched
+    // Check if the post exists
+    const post = await fetchPost(params.slug); // Fetch the post
+    const seo = post ? await fetchSEO(params.slug, "posts") : null; // Only fetch SEO if post exists
 
+    if (!post) {
+        // Return 404 metadata (Default SEO data)
+        return {
+            title: "Page Not Found",
+            description: "This page could not be found.",
+            keywords: "",
+            openGraph: {
+                title: "Page Not Found",
+                description: "This page could not be found.",
+                images: [{ url: "/default-image.jpg" }],
+            },
+        };
+    }
+
+    // Return SEO metadata for the found post
     return {
         title: seo?.title || "Default Title",
         description: seo?.description || "Default Description",

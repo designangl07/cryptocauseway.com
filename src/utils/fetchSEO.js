@@ -1,4 +1,3 @@
-// utils/fetchSEO.js
 export async function fetchSEO(slug, type = "pages") {
     // Construct API URL dynamically based on the type and slug
     const apiUrl = `${process.env.NEXT_PUBLIC_WORDPRESS_API}/wp/v2/${type}?slug=${slug}`;
@@ -12,6 +11,12 @@ export async function fetchSEO(slug, type = "pages") {
             cache: "no-store", // Ensures fresh SEO data on each request
         });
 
+        // Check if the response status is 404 (page not found)
+        if (response.status === 404) {
+            console.error(`Page with slug ${slug} not found (404 error)`);
+            return null; // Return null if it's a 404 error
+        }
+
         if (!response.ok) {
             console.error(`Failed to fetch SEO data for slug: ${slug}`);
             return null; // Return null if the response is not okay
@@ -20,9 +25,10 @@ export async function fetchSEO(slug, type = "pages") {
         const data = await response.json();
         console.log("Fetched SEO data:", data); // Debug log to check fetched data
 
-        if (!data.length) {
-            console.error(`No SEO data found for slug: ${slug}`);
-            return null; // Return null if no data is found for the given slug
+        // Check if data is an empty array or no valid SEO data found
+        if (!data || data.length === 0) {
+            console.warn(`No SEO data found for slug: ${slug}`); // Log a warning instead of an error
+            return null; // Return null if no valid data is found for the given slug
         }
 
         const post = data[0]; // Extract first matching result

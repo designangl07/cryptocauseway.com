@@ -4,12 +4,25 @@ import { usePathname } from 'next/navigation'; // Import usePathname
 import Header from '../components/header';
 import Footer from '../components/footer';
 import Popup from '../components/popup';
+import { fetchSEO } from "@/utils/fetchSEO";
 
 export default function ClientLayout({ children }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isPostFound, setIsPostFound] = useState(true); // Track whether post is found or not
   const pathname = usePathname(); // Get the current path
-  const canonicalUrl = `https://cryptocauseway.com${pathname}`; // Construct canonical URL
+  const slug = pathname.split('/').pop(); // Extract the slug from the URL path
   const is404Page = pathname === '/404'; // Check if it's the 404 page
+  const canonicalUrl = `https://cryptocauseway.com${pathname}`; // Construct canonical URL
+
+  // Fetch post data to check if it exists
+  useEffect(() => {
+    const checkPostExists = async () => {
+      const post = await fetchSEO(slug); // Fetch post data based on slug
+      setIsPostFound(!!post); // Set state based on whether post is found
+    };
+
+    checkPostExists();
+  }, [slug]);
 
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
@@ -32,9 +45,19 @@ export default function ClientLayout({ children }) {
       <main>{children}</main>
       <Footer />
       <Popup isOpen={isPopupOpen} closePopup={closePopup} />
-      {/* Render canonical link only if it's not the 404 page */}
-      {!is404Page && (
-        <link rel="canonical" href={canonicalUrl} />
+
+      {/* Meta tags for valid pages (when post is found) */}
+      {!is404Page && isPostFound && (
+        <>
+          <meta name="robots" content="index, follow" />
+          <meta name="google-site-verification" content="5a1lIHoY1OBn86f4qsWQzjGLZrbBSO1RSJXxw0ANjSw" />
+          <link rel="canonical" href={canonicalUrl} />
+        </>
+      )}
+
+      {/* Meta tag for 404 pages or when post is not found */}
+      {(is404Page || !isPostFound) && (
+        <meta name="robots" content="noindex" />
       )}
     </>
   );

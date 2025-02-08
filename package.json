@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postbuild": "next-sitemap",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -14,6 +15,8 @@
     "ethers": "^6.13.5",
     "he": "^1.2.0",
     "next": "^15.1.6",
+    "next-sitemap": "^4.2.3",
+    "node-fetch": "^3.3.2",
     "qrcode.react": "^4.2.0",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.8",
