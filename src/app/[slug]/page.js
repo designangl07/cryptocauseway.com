@@ -1,34 +1,38 @@
 import { fetchSEO } from "@/utils/fetchSEO";
 import { Container, Row, Col, Button } from 'react-bootstrap';
+import { decode } from 'he';
 
 // Fetch SEO data for individual blog post
 export async function generateMetadata({ params }) {
-    // Check if the post exists
-    const post = await fetchPost(params.slug); // Fetch the post
-    const seo = post ? await fetchSEO(params.slug, "posts") : null; // Only fetch SEO if post exists
+    const seo = await fetchSEO(params.slug, "posts");
 
-    if (!post) {
-        // Return 404 metadata (Default SEO data)
+    if (!seo) {
+        // If SEO data is not found, return default values for 404 pages
         return {
-            title: "Page Not Found",
-            description: "This page could not be found.",
-            keywords: "",
+            title: "404 Not Found",
+            description: "The page you are looking for does not exist.",
+            keywords: "404, not found",
             openGraph: {
-                title: "Page Not Found",
-                description: "This page could not be found.",
+                title: "404 Not Found",
+                description: "The page you are looking for does not exist.",
                 images: [{ url: "/default-image.jpg" }],
             },
         };
     }
 
-    // Return SEO metadata for the found post
+    // Strip HTML tags
+    let cleanDescription = seo?.description ? seo.description.replace(/<[^>]*>?/gm, '') : "Default Description";
+
+    // Decode HTML entities
+    cleanDescription = decode(cleanDescription);  
+
     return {
         title: seo?.title || "Default Title",
-        description: seo?.description || "Default Description",
+        description: cleanDescription, // Use sanitized & decoded description
         keywords: seo?.keywords || "",
         openGraph: {
             title: seo?.title || "Default Title",
-            description: seo?.description || "Default Description",
+            description: cleanDescription, // Use sanitized & decoded description
             images: [{ url: seo?.ogImage || "/default-image.jpg" }],
         },
     };

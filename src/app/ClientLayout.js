@@ -1,31 +1,39 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation'; // Import usePathname
 import Header from '../components/header';
 import Footer from '../components/footer';
 import Popup from '../components/popup';
-import { fetchSEO } from "@/utils/fetchSEO";
+import { fetchPageBySlug, fetchPostBySlug } from "@/utils/api"; // Add import for API functions
 
 export default function ClientLayout({ children }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isPostFound, setIsPostFound] = useState(true); // Track whether post is found or not
+  const [isNotFound, setIsNotFound] = useState(false); // Track if the page/post is not found
   const pathname = usePathname(); // Get the current path
-  const slug = pathname.split('/').pop(); // Extract the slug from the URL path
   const is404Page = pathname === '/404'; // Check if it's the 404 page
   const canonicalUrl = `https://cryptocauseway.com${pathname}`; // Construct canonical URL
 
-  // Fetch post data to check if it exists
-  useEffect(() => {
-    const checkPostExists = async () => {
-      const post = await fetchSEO(slug); // Fetch post data based on slug
-      setIsPostFound(!!post); // Set state based on whether post is found
-    };
-
-    checkPostExists();
-  }, [slug]);
-
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
+
+  // Check if the page or post exists using useEffect
+  useEffect(() => {
+    const checkPageOrPostExistence = async () => {
+      const slug = pathname.split("/").pop(); // Assuming the last part of the pathname is the slug
+      
+      // Fetch page or post by slug
+      const page = await fetchPageBySlug(slug);
+      const post = await fetchPostBySlug(slug);
+
+      if (!page && !post) {
+        setIsNotFound(true); // If neither page nor post exists
+      } else {
+        setIsNotFound(false);
+      }
+    };
+
+    checkPageOrPostExistence();
+  }, [pathname]);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -46,18 +54,19 @@ export default function ClientLayout({ children }) {
       <Footer />
       <Popup isOpen={isPopupOpen} closePopup={closePopup} />
 
-      {/* Meta tags for valid pages (when post is found) */}
-      {!is404Page && isPostFound && (
+      {/* Render meta tags based on page existence */}
+      {!isNotFound ? (
+        // If the page exists, render the default meta tags
         <>
           <meta name="robots" content="index, follow" />
           <meta name="google-site-verification" content="5a1lIHoY1OBn86f4qsWQzjGLZrbBSO1RSJXxw0ANjSw" />
           <link rel="canonical" href={canonicalUrl} />
         </>
-      )}
-
-      {/* Meta tag for 404 pages or when post is not found */}
-      {(is404Page || !isPostFound) && (
-        <meta name="robots" content="noindex" />
+      ) : (
+        // If page is not found, render noindex meta tag
+        <>
+          <meta name="robots" content="noindex, nofollow" data-next-head="" />
+        </>
       )}
     </>
   );
