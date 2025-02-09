@@ -51,37 +51,47 @@ const ContactPage = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({
-      ...formData,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
-    });
-  };
-
-  const handleFileChange = (event) => {
-    const { name, files } = event.target;
-    setFormData({
-      ...formData,
-      [name]: files[0], // Store only the first selected file
-    });
+    }));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Send the form data to your API (or handle it as per your setup)
-    console.log("Form data submitted:", formData);
-
-    // Simulating a successful form submission
+  
+    // Create a new FormData object
+    const formDataToSend = new FormData();
+  
+    // Add the CF7 required fields to the FormData
+    formDataToSend.append("_wpcf7", "37");
+    formDataToSend.append("_wpcf7_version", "5.7.7");
+    formDataToSend.append("_wpcf7_unit_tag", "contact-form-37");
+  
+    // Append user form data manually
+    Object.keys(formData).forEach((field) => {
+      if (formData[field]) {
+        formDataToSend.append(field, formData[field]);
+      }
+    });
+  
+    console.log("Form data before submission:", formData); // Check the form data in the state
+  
+    // Log the contents of the FormData object
+    for (let [key, value] of formDataToSend.entries()) {
+      console.log(key, value);
+    }
+  
     try {
-      const apiUrl = `${API_URL}/contact-form-7/v1/contact-forms/37`; // Replace with the correct API endpoint for submission
+      const apiUrl = `${API_URL}/contact-form-7/v1/contact-forms/37/feedback`;
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${JWT_TOKEN}`,
+          "Authorization": `Bearer ${JWT_TOKEN}`,
         },
-        body: JSON.stringify(formData),
+        body: formDataToSend, // Send the FormData object directly
       });
-
+  
       if (response.ok) {
         setSuccessMessage("Thank you for your message. It has been sent.");
         setFormData({}); // Optionally reset the form data after successful submission
@@ -93,98 +103,104 @@ const ContactPage = () => {
       console.error("Error during form submission:", error);
     }
   };
+  
 
   return (
     <div>
-    {/* Hero Section */}
-    <div className='hero-inner'>
-      <h1 className="text-center my-4">Contact Us</h1>
-      <p className="text-center">Please fill out the form below, and our team will get back to you as soon as possible.</p>
-    </div>
-    <div className="container py-5">
-      <form onSubmit={handleSubmit} className="p-4 rounded">
-        <div className="row">
-        {formFields.map((field, index) => {
-  const { name, type, raw_values } = field;
-
-  // Split into two columns for medium screens and above
-  const isFirstColumn = index % 2 === 0;
-  const columnClass = isFirstColumn ? "col-md-6" : "col-md-6";
-
-  return (
-    <div key={name} className={columnClass}>
-      <div className="mb-3">
-        {/* Render label only if the field is not of type 'submit' */}
-        {type !== "submit" && (
-          <label htmlFor={name} className="form-label">
-            {/* Check if it's the 'Category' or 'Service Required' field */}
-            {name === "category" ? "Category" : name === "services-required" ? "Service Required" : field.labels && field.labels[0]}
-          </label>
-        )}
-
-        {/* Handling different types of inputs */}
-        {type === "text*" ||
-        type === "email*" ||
-        type === "tel*" ||
-        type === "url*" ? (
-          <input
-            type={type === "email*" ? "email" : type}
-            name={name}
-            id={name}
-            className="form-control"
-            value={formData[name] || ""}
-            onChange={handleChange}
-            required
-          />
-        ) : type === "select*" ? (
-          <>
-            <select
-              name={name}
-              id={name}
-              className="form-select"
-              value={formData[name] || ""}
-              onChange={handleChange}
-              required
-            >
-              {raw_values &&
-                raw_values.map((option, index) => (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                ))}
-            </select>
-          </>
-        ) : type === "file*" ? (
-          <input
-            type="file"
-            name={name}
-            id={name}
-            className="form-control"
-            onChange={handleFileChange}
-            required
-          />
-        ) : null}
+      {/* Hero Section */}
+      <div className='hero-inner'>
+        <h1 className="text-center my-4">Contact Us</h1>
+        <p className="text-center">Please fill out the form below, and our team will get back to you as soon as possible.</p>
       </div>
-    </div>
-  );
-})}
-        </div>
+      <div className="container py-5">
+        <form onSubmit={handleSubmit} className="p-4 rounded">
+          <div className="row">
+            {formFields.map((field, index) => {
+              const { name, type, raw_values } = field;
 
-        {/* Display success message */}
-        {successMessage && (
-          <div className="alert alert-success text-center mt-4" role="alert">
-            {successMessage}
+              // Skip the 'company-proof' field
+              if (name === "company-proof") {
+                return null; // Do not render this field
+              }
+
+              // Split into two columns for medium screens and above
+              const isFirstColumn = index % 2 === 0;
+              const columnClass = isFirstColumn ? "col-md-6" : "col-md-6";
+
+              return (
+                <div key={name} className={columnClass}>
+                  <div className="mb-3">
+                    {/* Render label only if the field is not of type 'submit' */}
+                    {type !== "submit" && (
+                      <label htmlFor={name} className="form-label">
+                        {/* Check if it's the 'Category' or 'Service Required' field */}
+                        {name === "category" ? "Category" : name === "services-required" ? "Service Required" : field.labels && field.labels[0]}
+                      </label>
+                    )}
+
+                    {/* Handling different types of inputs */}
+                    {type === "text*" ||
+                    type === "email*" ||
+                    type === "tel*" ||
+                    type === "url*" ? (
+                      <input
+                        type={type === "email*" ? "email" : type}
+                        name={name}
+                        id={name}
+                        className="form-control"
+                        value={formData[name] || ""}
+                        onChange={handleChange}
+                        required
+                      />
+                    ) : type === "select*" ? (
+                      <>
+                        <select
+                          name={name}
+                          id={name}
+                          className="form-select"
+                          value={formData[name] || ""}
+                          onChange={handleChange}
+                          required
+                        >
+                          {raw_values &&
+                            raw_values.map((option, index) => (
+                              <option key={index} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                        </select>
+                      </>
+                    ) : type === "file*" ? (
+                      <input
+                        type="file"
+                        name={name}
+                        id={name}
+                        className="form-control"
+                        onChange={handleFileChange}
+                        required
+                      />
+                    ) : null}
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        )}
 
-        {/* Submit Button */}
-        <div className="text-center">
-          <button type="submit" className="btn btn-primary">
-            {submitText} {/* Display the correct submit button text */}
-          </button>
-        </div>
-      </form>
-    </div>
+          {/* Display success message */}
+          {successMessage && (
+            <div className="alert alert-success text-center mt-4" role="alert">
+              {successMessage}
+            </div>
+          )}
+
+          {/* Submit Button */}
+          <div className="text-center">
+            <button type="submit" className="btn btn-primary">
+              {submitText} {/* Display the correct submit button text */}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
