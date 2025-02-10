@@ -1,208 +1,200 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { JWT_TOKEN, API_URL } from "../../utils/api"; // Adjust based on your actual import path
+import { useState } from "react";
+import { Container, Row, Col, Button, Form } from "react-bootstrap";
 
-const ContactPage = () => {
-  const [formFields, setFormFields] = useState([]);
-  const [formData, setFormData] = useState({});
-  const [submitText, setSubmitText] = useState("Submit");
-  const [successMessage, setSuccessMessage] = useState(""); // State to handle success message
+const ContactForm = () => {
+  const [formData, setFormData] = useState({
+    "full-name": "",
+    "company-name": "",
+    "email-address": "",
+    "phone-number": "",
+    "website-url": "",
+    category: "Charity",
+    "services-required": "Branding",
+  });
 
-  useEffect(() => {
-    const fetchContactPage = async () => {
-      try {
-        const apiUrl = `${API_URL}/contact-form-7/v1/contact-forms/37`; // log the full URL
-        console.log("Fetching form from:", apiUrl);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
-        const response = await fetch(apiUrl, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${JWT_TOKEN}`,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Fetched form data:", data);
-
-          // Parse form fields into the desired format
-          const fields = data.properties.form.fields.map((field) => ({
-            ...field,
-            value: "", // Initialize value state for each field
-          }));
-
-          // Find and set the submit button text
-          const submitButton = data.properties.form.fields.find(field => field.type === 'submit');
-          if (submitButton) {
-            setSubmitText(submitButton.raw_values[0]); // Set the button text to the raw value
-          }
-
-          setFormFields(fields);
-        } else {
-          console.error("Error fetching form:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error fetching contact page:", error);
-      }
-    };
-
-    fetchContactPage();
-  }, []);
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
       [name]: value,
-    }));
+    });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-  
-    // Create a new FormData object
-    const formDataToSend = new FormData();
-  
-    // Add the CF7 required fields to the FormData
-    formDataToSend.append("_wpcf7", "37");
-    formDataToSend.append("_wpcf7_version", "5.7.7");
-    formDataToSend.append("_wpcf7_unit_tag", "contact-form-37");
-  
-    // Append user form data manually
-    Object.keys(formData).forEach((field) => {
-      if (formData[field]) {
-        formDataToSend.append(field, formData[field]);
-      }
-    });
-  
-    console.log("Form data before submission:", formData); // Check the form data in the state
-  
-    // Log the contents of the FormData object
-    for (let [key, value] of formDataToSend.entries()) {
-      console.log(key, value);
-    }
-  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    const form = new FormData();
+    Object.keys(formData).forEach((key) => form.append(key, formData[key]));
+
+    form.append("_wpcf7", "37");
+    form.append("_wpcf7_unit_tag", "contact-form-37");
+    form.append("_wpcf7_version", "5.7.7");
+
     try {
-      const apiUrl = `${API_URL}/contact-form-7/v1/contact-forms/37/feedback`;
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${JWT_TOKEN}`,
-        },
-        body: formDataToSend, // Send the FormData object directly
-      });
-  
-      if (response.ok) {
-        setSuccessMessage("Thank you for your message. It has been sent.");
-        setFormData({}); // Optionally reset the form data after successful submission
+      const response = await fetch(
+        "https://admin.cryptocauseway.com/wp-json/contact-form-7/v1/contact-forms/37/feedback",
+        {
+          method: "POST",
+          body: form,
+        }
+      );
+
+      const result = await response.json();
+      console.log("CF7 API Response:", result);
+
+      if (result.status === "mail_sent") {
+        setMessage("✅ Your message has been sent successfully!");
+        setFormData({
+          "full-name": "",
+          "company-name": "",
+          "email-address": "",
+          "phone-number": "",
+          "website-url": "",
+          category: "Charity",
+          "services-required": "Branding",
+        });
       } else {
-        setSuccessMessage("There was an issue sending your message. Please try again.");
+        setMessage(`❌ Failed: ${result.message}`);
       }
     } catch (error) {
-      setSuccessMessage("There was an error with your submission. Please try again.");
-      console.error("Error during form submission:", error);
+      console.error("API Error:", error);
+      setMessage("❌ An error occurred. Check console logs.");
     }
+
+    setLoading(false);
   };
-  
 
   return (
-    <div>
-      {/* Hero Section */}
-      <div className='hero-inner'>
-        <h1 className="text-center my-4">Contact Us</h1>
-        <p className="text-center">Please fill out the form below, and our team will get back to you as soon as possible.</p>
-      </div>
-      <div className="container py-5">
-        <form onSubmit={handleSubmit} className="p-4 rounded">
-          <div className="row">
-            {formFields.map((field, index) => {
-              const { name, type, raw_values } = field;
+    <Container className="my-5">
+      <h2 className="text-center">Contact Us</h2>
+      <Form onSubmit={handleSubmit}>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Label htmlFor="full-name">Full Name</Form.Label>
+            <Form.Control
+              type="text"
+              id="full-name"
+              name="full-name"
+              placeholder="Enter your Full Name"
+              value={formData["full-name"]}
+              onChange={handleChange}
+              required
+            />
+          </Col>
+          <Col md={6}>
+            <Form.Label htmlFor="company-name">Company Name</Form.Label>
+            <Form.Control
+              type="text"
+              id="company-name"
+              name="company-name"
+              placeholder="Enter your Company Name"
+              value={formData["company-name"]}
+              onChange={handleChange}
+              required
+            />
+          </Col>
+        </Row>
 
-              // Skip the 'company-proof' field
-              if (name === "company-proof") {
-                return null; // Do not render this field
-              }
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Label htmlFor="email-address">Email Address</Form.Label>
+            <Form.Control
+              type="email"
+              id="email-address"
+              name="email-address"
+              placeholder="Enter your Email Address"
+              value={formData["email-address"]}
+              onChange={handleChange}
+              required
+            />
+          </Col>
+          <Col md={6}>
+            <Form.Label htmlFor="phone-number">Phone Number</Form.Label>
+            <Form.Control
+              type="tel"
+              id="phone-number"
+              name="phone-number"
+              placeholder="Enter your Phone Number"
+              value={formData["phone-number"]}
+              onChange={handleChange}
+              required
+            />
+          </Col>
+        </Row>
 
-              // Split into two columns for medium screens and above
-              const isFirstColumn = index % 2 === 0;
-              const columnClass = isFirstColumn ? "col-md-6" : "col-md-6";
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Label htmlFor="website-url">Website URL</Form.Label>
+            <Form.Control
+              type="url"
+              id="website-url"
+              name="website-url"
+              placeholder="Enter your Website URL"
+              value={formData["website-url"]}
+              onChange={handleChange}
+              required
+            />
+          </Col>
+          <Col md={6}>
+            <Form.Label htmlFor="category">Category</Form.Label>
+            <Form.Select
+              name="category"
+              id="category"
+              value={formData["category"]}
+              onChange={handleChange}
+              required
+            >
+              <option value="Charity">Charity</option>
+              <option value="Sustainable Project">Sustainable Project</option>
+              <option value="Animal Rescue">Animal Rescue</option>
+              <option value="Newly Launched Cryptocurrency Owner">
+                Newly Launched Cryptocurrency Owner
+              </option>
+            </Form.Select>
+          </Col>
+        </Row>
 
-              return (
-                <div key={name} className={columnClass}>
-                  <div className="mb-3">
-                    {/* Render label only if the field is not of type 'submit' */}
-                    {type !== "submit" && (
-                      <label htmlFor={name} className="form-label">
-                        {/* Check if it's the 'Category' or 'Service Required' field */}
-                        {name === "category" ? "Category" : name === "services-required" ? "Service Required" : field.labels && field.labels[0]}
-                      </label>
-                    )}
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Label htmlFor="services-required">Service Required</Form.Label>
+            <Form.Select
+              name="services-required"
+              id="services-required"
+              value={formData["services-required"]}
+              onChange={handleChange}
+              required
+            >
+              <option value="Branding">Branding</option>
+              <option value="Web Design & Development">Web Design & Development</option>
+              <option value="Digital Marketing">Digital Marketing</option>
+            </Form.Select>
+          </Col>
+          <Col md={6}>
+            <div>&nbsp;</div> {/* Empty div for layout purposes */}
+          </Col>
+        </Row>
 
-                    {/* Handling different types of inputs */}
-                    {type === "text*" ||
-                    type === "email*" ||
-                    type === "tel*" ||
-                    type === "url*" ? (
-                      <input
-                        type={type === "email*" ? "email" : type}
-                        name={name}
-                        id={name}
-                        className="form-control"
-                        value={formData[name] || ""}
-                        onChange={handleChange}
-                        required
-                      />
-                    ) : type === "select*" ? (
-                      <>
-                        <select
-                          name={name}
-                          id={name}
-                          className="form-select"
-                          value={formData[name] || ""}
-                          onChange={handleChange}
-                          required
-                        >
-                          {raw_values &&
-                            raw_values.map((option, index) => (
-                              <option key={index} value={option}>
-                                {option}
-                              </option>
-                            ))}
-                        </select>
-                      </>
-                    ) : type === "file*" ? (
-                      <input
-                        type="file"
-                        name={name}
-                        id={name}
-                        className="form-control"
-                        onChange={handleFileChange}
-                        required
-                      />
-                    ) : null}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+        <Row className="mb-3">
+          <Col className="text-center">
+            <Button type="submit" variant="primary" disabled={loading}>
+              {loading ? "Submitting..." : "Submit"}
+            </Button>
+          </Col>
+        </Row>
+      </Form>
 
-          {/* Display success message */}
-          {successMessage && (
-            <div className="alert alert-success text-center mt-4" role="alert">
-              {successMessage}
-            </div>
-          )}
-
-          {/* Submit Button */}
-          <div className="text-center">
-            <button type="submit" className="btn btn-primary">
-              {submitText} {/* Display the correct submit button text */}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+      {message && <p className="mt-3 text-center">{message}</p>}
+    </Container>
   );
 };
 
-export default ContactPage;
+export default ContactForm;
+
+
+
