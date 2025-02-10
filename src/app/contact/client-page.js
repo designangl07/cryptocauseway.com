@@ -46,7 +46,7 @@ const ContactForm = () => {
       );
 
       const result = await response.json();
-      console.log("CF7 API Response:", result);
+      //console.log("CF7 API Response:", result);
 
       if (result.status === "mail_sent") {
         setMessage("✅ Your message has been sent successfully!");
