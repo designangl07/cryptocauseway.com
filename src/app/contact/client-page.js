@@ -71,8 +71,12 @@ const ContactForm = () => {
   };
 
   return (
+    <div>
+    {/* Hero Section */}
+    <div className='hero-inner'>
+      <h1 className="text-center my-4">Contact us</h1>
+    </div>
     <Container className="my-5">
-      <h2 className="text-center">Contact Us</h2>
       <Form onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Col md={6}>
@@ -191,6 +195,7 @@ const ContactForm = () => {
 
       {message && <p className="mt-3 text-center">{message}</p>}
     </Container>
+    </div>
   );
 };
 
