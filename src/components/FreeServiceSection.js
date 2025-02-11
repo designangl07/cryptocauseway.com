@@ -12,8 +12,8 @@ const FreeServicesSection = () => {
       content: 'We offer free branding, website design, and marketing services to help charity projects reach their full potential. Whether you\'re supporting a local cause or making a global difference, our goal is to help you connect with more people who can support your mission. With our free services, you can build a strong online presence and engage more donors and volunteers to join your cause.' 
     },
     { 
-      id: 'suitability', 
-      title: 'Suitability', 
+      id: 'sustainability', 
+      title: 'Sustainability',      
       image: '/assets/suitability-image.svg', 
       content: 'If you\'re working on sustainability initiatives, we provide free website design, development, and branding services to help you get noticed. Whether it\'s promoting eco-friendly products, sustainable living practices, or environmental advocacy, we’re here to help. With our free digital marketing posts, your message can reach the right audience who are passionate about making the world greener and more sustainable.' 
     },
