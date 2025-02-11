@@ -13,7 +13,10 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         {/* Client Component for Header, Footer, and Popup */}
-        <ClientLayout>{children}</ClientLayout>
+        <ClientLayout>
+          {children}
+          <SpeedInsights />
+        </ClientLayout>
       </body>
     </html>
   );
