@@ -1,6 +1,7 @@
 // app/services/client-page.js (Client Component)
 "use client";
 import React from 'react';
+import Link from 'next/link';
 
 const ServicesPage = () => {
   return (
@@ -28,7 +29,7 @@ const ServicesPage = () => {
                 <li><strong>Brand Identity:</strong> Guidelines to ensure consistency across your digital and print materials.</li>
               </ul>
               <p>Let us help you create a lasting impact with a brand that people trust and believe in.</p>
-              <a href="/contact" className="btn btn-primary">Get Started</a>
+              <Link href="/contact" className="btn btn-primary">Get Started</Link>
             </div>
             {/* Left side image */}
             <div className="col-md-6">
@@ -52,7 +53,7 @@ const ServicesPage = () => {
                 <li><strong>SEO Optimization:</strong> We integrate best practices to help your site rank higher on search engines and reach a larger audience.</li>
               </ul>
               <p>We’re here to help you tell your story and make a greater impact online—at no cost to you.</p>
-              <a href="/contact" className="btn btn-primary">Get Started</a>
+              <Link href="/contact" className="btn btn-primary">Get Started</Link>
             </div>
           </div>
 
@@ -69,7 +70,7 @@ const ServicesPage = () => {
                 <li><strong>Targeted Content Creation:</strong> We create content that speaks directly to the needs and interests of your community.</li>
               </ul>
               <p>Take your cryptocurrency project to the next level by engaging with more visitors and building a stronger community—at no charge.</p>
-              <a href="/contact" className="btn btn-primary">Get Started</a>
+              <Link href="/contact" className="btn btn-primary">Get Started</Link>
             </div>
             {/* Left side image */}
             <div className="col-md-6">
