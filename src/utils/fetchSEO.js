@@ -23,7 +23,7 @@ export async function fetchSEO(slug, type = "pages") {
         }
 
         const data = await response.json();
-        console.log("Fetched SEO data:", data); // Debug log to check fetched data
+        //console.log("Fetched SEO data:", data); // Debug log to check fetched data
 
         // Check if data is an empty array or no valid SEO data found
         if (!data || data.length === 0) {

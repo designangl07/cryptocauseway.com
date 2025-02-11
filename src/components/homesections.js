@@ -16,7 +16,7 @@ export default function Homesections() {
     setIsPopupOpen(false);
   };
 
-  console.log('Rendering Home page');
+  //console.log('Rendering Home page');
 
   return (
     <div>

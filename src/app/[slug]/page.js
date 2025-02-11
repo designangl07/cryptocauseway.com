@@ -3,11 +3,10 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { decode } from 'he';
 
 // Fetch SEO data for individual blog post
+// Fetch SEO data for individual blog post
 export async function generateMetadata({ params }) {
-    const seo = await fetchSEO(params.slug, "posts");
-
-    if (!seo) {
-        // If SEO data is not found, return default values for 404 pages
+    // Await the params if needed
+    if (!params?.slug) {
         return {
             title: "404 Not Found",
             description: "The page you are looking for does not exist.",
@@ -20,19 +19,32 @@ export async function generateMetadata({ params }) {
         };
     }
 
-    // Strip HTML tags
-    let cleanDescription = seo?.description ? seo.description.replace(/<[^>]*>?/gm, '') : "Default Description";
+    const slug = decodeURIComponent(params.slug); // Ensure slug is correctly decoded
+    const seo = await fetchSEO(slug, "posts");
 
-    // Decode HTML entities
-    cleanDescription = decode(cleanDescription);  
+    if (!seo) {
+        return {
+            title: "404 Not Found",
+            description: "The page you are looking for does not exist.",
+            keywords: "404, not found",
+            openGraph: {
+                title: "404 Not Found",
+                description: "The page you are looking for does not exist.",
+                images: [{ url: "/default-image.jpg" }],
+            },
+        };
+    }
+
+    let cleanDescription = seo?.description ? seo.description.replace(/<[^>]*>?/gm, '') : "Default Description";
+    cleanDescription = decode(cleanDescription);
 
     return {
         title: seo?.title || "Default Title",
-        description: cleanDescription, // Use sanitized & decoded description
+        description: cleanDescription,
         keywords: seo?.keywords || "",
         openGraph: {
             title: seo?.title || "Default Title",
-            description: cleanDescription, // Use sanitized & decoded description
+            description: cleanDescription,
             images: [{ url: seo?.ogImage || "/default-image.jpg" }],
         },
     };
@@ -47,7 +59,6 @@ export async function fetchPost(slug) {
     });
 
     if (!response.ok) {
-        //console.error("Failed to fetch post.");
         return null;
     }
 
@@ -56,7 +67,22 @@ export async function fetchPost(slug) {
 }
 
 export default async function BlogPostPage({ params }) {
-    const post = await fetchPost(params.slug); // Fetch the full post by slug
+    // Ensure params are available before accessing
+    if (!params?.slug) {
+        return (
+            <div className="error-container">
+                <div className="error-content">
+                    <h1 className="next-error-h1">404</h1>
+                    <div>
+                        <h2>This page could not be found.</h2>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    const slug = decodeURIComponent(params.slug); // Ensure slug is correctly decoded
+    const post = await fetchPost(slug);
 
     if (!post) {
         return (
@@ -73,19 +99,20 @@ export default async function BlogPostPage({ params }) {
 
     return (
         <div>
-        {/* Hero Section */}
-        <div className='hero-inner'>
-        <Container className="blog"><h1 className="text-center">{post.title.rendered}</h1></Container>
-        </div>
-        <main className="blog">
-            <Container>
-            <Row>
-            <div
-                dangerouslySetInnerHTML={{ __html: post.content.rendered }} // Render the full content
-            />
-            </Row>
-            </Container>
-        </main>
+            {/* Hero Section */}
+            <div className='hero-inner'>
+                <Container className="blog">
+                    <h1 className="text-center">{post.title.rendered}</h1>
+                </Container>
+            </div>
+            <main className="blog">
+                <Container>
+                    <Row>
+                        <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+                    </Row>
+                </Container>
+            </main>
         </div>
     );
 }
+
