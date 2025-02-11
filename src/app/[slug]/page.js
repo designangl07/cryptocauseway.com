@@ -3,9 +3,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { decode } from 'he';
 
 // Fetch SEO data for individual blog post
-// Fetch SEO data for individual blog post
 export async function generateMetadata({ params }) {
-    // Await the params if needed
     if (!params?.slug) {
         return {
             title: "404 Not Found",
@@ -19,7 +17,7 @@ export async function generateMetadata({ params }) {
         };
     }
 
-    const slug = decodeURIComponent(params.slug); // Ensure slug is correctly decoded
+    const slug = decodeURIComponent(params.slug);
     const seo = await fetchSEO(slug, "posts");
 
     if (!seo) {
@@ -38,12 +36,15 @@ export async function generateMetadata({ params }) {
     let cleanDescription = seo?.description ? seo.description.replace(/<[^>]*>?/gm, '') : "Default Description";
     cleanDescription = decode(cleanDescription);
 
+    // Decode the title as well
+    let cleanTitle = seo?.title ? decode(seo.title) : "Default Title";
+
     return {
-        title: seo?.title || "Default Title",
+        title: cleanTitle,
         description: cleanDescription,
         keywords: seo?.keywords || "",
         openGraph: {
-            title: seo?.title || "Default Title",
+            title: cleanTitle,
             description: cleanDescription,
             images: [{ url: seo?.ogImage || "/default-image.jpg" }],
         },
@@ -96,13 +97,15 @@ export default async function BlogPostPage({ params }) {
             </div>
         );
     }
+// Decode the title before rendering
+const decodedTitle = decode(post.title.rendered);
 
     return (
         <div>
             {/* Hero Section */}
             <div className='hero-inner'>
                 <Container className="blog">
-                    <h1 className="text-center">{post.title.rendered}</h1>
+                <h1 className="text-center">{decodedTitle}</h1>
                 </Container>
             </div>
             <main className="blog">
