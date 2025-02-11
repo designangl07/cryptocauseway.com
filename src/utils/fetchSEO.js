@@ -23,7 +23,7 @@ export async function fetchSEO(slug, type = "pages") {
         }
 
         const data = await response.json();
-        //console.log("Fetched SEO data:", data); // Debug log to check fetched data
+        console.log("Fetched SEO data:", data); // Debug log to check fetched data
 
         // Check if data is an empty array or no valid SEO data found
         if (!data || data.length === 0) {
@@ -32,11 +32,28 @@ export async function fetchSEO(slug, type = "pages") {
         }
 
         const post = data[0]; // Extract first matching result
+
+        // Fetch featured media URL if featured_media is present
+        let ogImage = "/default-image.jpg"; // Default fallback image
+        if (post.featured_media) {
+            const mediaUrl = `${process.env.NEXT_PUBLIC_WORDPRESS_API}/wp/v2/media/${post.featured_media}`;
+            const mediaResponse = await fetch(mediaUrl, {
+                headers: {
+                    Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+                },
+            });
+
+            if (mediaResponse.ok) {
+                const mediaData = await mediaResponse.json();
+                ogImage = mediaData.source_url; // Use the source URL of the media
+            }
+        }
+
         return {
             title: post.rank_math_title || post.title?.rendered || "Default Title", // Prefer rank math title, fall back to WP title
             description: post.rank_math_description || post.excerpt?.rendered || "Default description", // Use rank math description or WP excerpt
             keywords: post.rank_math_focus_keyword || "", // Use rank math focus keyword
-            ogImage: post.rank_math_og_content_image || "/default-image.jpg", // Use rank math OG image, fall back to default
+            ogImage: ogImage, // Use the fetched featured media URL or default image
         };
     } catch (error) {
         //console.error("Error fetching SEO data:", error); // Log any unexpected errors
