@@ -10,6 +10,7 @@ const Popup = ({ isOpen, closePopup }) => {
     BTC: 'bc1qatl7z86yvxnya0yre2hhh5thm9qs6hlgslltgv',  // BTC Address
     ETH: '0x6d59fD29c048e22022bbAB5df74b655bb7e69dD5', // ETH Address
     BNB: '0xd232c41b4df8ee31551ad493eebfebdeeaa867a5', // BNB Address
+    SOL: '8cYuZAHAfhZZqsb96rnaPoYxTqi2Qi51EAfZa1LaSeKx', // Solana Address
   };
 
   const [selectedCrypto, setSelectedCrypto] = useState('BTC');
@@ -32,6 +33,7 @@ const Popup = ({ isOpen, closePopup }) => {
     { logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png', name: 'BTC' },
     { logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', name: 'ETH' },
     { logo: 'https://cryptologos.cc/logos/binance-coin-bnb-logo.png', name: 'BNB' },
+    { logo: 'https://cryptologos.cc/logos/solana-sol-logo.png', name: 'SOL' }, // Solana logo
   ];
 
   const handleSelectCrypto = (crypto) => {
