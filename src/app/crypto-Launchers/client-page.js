@@ -9,7 +9,7 @@ const CryptoDonatorsPage = () => {
       {/* Free Services Section */}
       <section className="service-section hero-inner py-5">
         <div className="container">
-          <h1 className="text-center mb-4">Boost Your New Crypto Coin with Expert Marketing Services</h1>
+          <h1 className="text-center mb-4">Get Free Marketing Support to Boost Your Crypto Project</h1>
         </div>
       </section>
 
@@ -21,13 +21,37 @@ const CryptoDonatorsPage = () => {
       {/* Right side content */}
       <div className="col-md-12">
         <h3>Make Your Crypto Launch Successful</h3>
-        <p><strong>For cryptocurrency creators launching new projects:</strong> Cryptocauseway is here to help you reach a larger audience, enhance your visibility, and grow your crypto coin. We provide tailored marketing solutions to ensure your new launch gets the attention it deserves.</p>
+        <p><strong>Launching a new cryptocurrency can be challenging,</strong> especially when it comes to gaining trust, visibility, and engagement. Whether you’re introducing a utility token, meme coin, stablecoin, or NFT-based crypto project, getting the right audience to notice your project is crucial for its success.
+
+We provide free marketing services to help new crypto creators build a strong online presence, attract investors, and establish credibility. Our expert team assists with everything from landing page creation and branding to social media marketing and SEO optimization—all at no cost to you!</p>
         <ul>
           <li><strong>Landing Pages:</strong> Our team will design high-converting landing pages to capture the interest of potential investors and users.</li>
           <li><strong>SEO Strategy:</strong> We implement SEO best practices to ensure your crypto project ranks well on search engines, helping you attract organic traffic.</li>
           <li><strong>Social Media Campaigns:</strong> From posts to ads, we create social media campaigns that resonate with your target audience and increase engagement.</li>
         </ul>
-        <p>With our expertise in digital marketing for cryptocurrency, your new launch is set for success. We're here to make sure your coin gains traction and attracts the right investors.</p>
+        <p>We believe in empowering new blockchain projects by offering the tools they need to succeed. By supporting your growth, we help create a healthier and more transparent crypto ecosystem.</p>
+      </div>
+      {/* Left side image */}
+    </div>
+
+        {/* Crypto Community Engagement Section */}
+        <div className="row align-items-center mb-5">
+      {/* Right side content */}
+      <div className="col-md-12">
+        <h3>Who Can Apply?</h3>
+        <p>Our services are available for all new crypto projects, including:</p>
+        <div className="row text-left">
+            <div className="col-md-3"><strong>Utility Tokens</strong></div>
+            <div className="col-md-3"><strong>Security Tokens</strong></div>
+            <div className="col-md-3"><strong>Meme Coins</strong></div>
+            <div className="col-md-3"><strong>NFT Tokens</strong></div>
+        </div>
+        <div className="row text-left mt-3">
+            <div className="col-md-3"><strong>Stablecoins</strong></div>
+            <div className="col-md-3"><strong>Privacy Coins</strong></div>
+            <div className="col-md-3"><strong>Web3 & DeFi Projects</strong></div>
+            <div className="col-md-3"><strong>Newly Launched Cryptos</strong></div>
+        </div>
       </div>
       {/* Left side image */}
     </div>
@@ -49,7 +73,7 @@ const CryptoDonatorsPage = () => {
     </div>
 
     {/* Crypto Community Engagement Section */}
-    <div className="row align-items-center">
+    <div className="row align-items-center mb-5">
       {/* Right side content */}
       <div className="col-md-12">
         <h3>Build Your Crypto Community</h3>
@@ -60,6 +84,17 @@ const CryptoDonatorsPage = () => {
           <li><strong>Continual Growth:</strong> We help you maintain long-term engagement with your community, ensuring that your crypto project continues to grow post-launch.</li>
         </ul>
         <p>Your cryptocurrency’s success depends on the strength of its community. Let us help you build and sustain a thriving ecosystem around your project.</p>
+      </div>
+      {/* Left side image */}
+    </div>
+
+    <div className="row align-items-center">
+      {/* Right side content */}
+      <div className="col-md-12">
+        <h3>Why is Crypto Marketing Important?</h3>
+        <p>The crypto space is <strong>highly competitive,</strong> with thousands of projects launching each year. Without the right marketing strategy, even the most innovative cryptocurrencies struggle to gain traction. A solid marketing plan increases investor confidence, improves adoption, and ensures long-term success.
+
+By offering free marketing support, we help emerging crypto projects <strong>stand out in the crowded market, attract investors, and build a strong community.</strong></p>
         <Link href="/contact" className="btn btn-primary">Get Started</Link>
       </div>
       {/* Left side image */}

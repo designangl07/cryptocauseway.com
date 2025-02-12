@@ -51,7 +51,13 @@ export default function Homesections() {
             <Col md={6} className="text-left align-self-center">
               <h2>For Crypto Donators</h2>
               <h4>Support a Healthy World with Your Crypto Donations</h4>
-              <p className="para">Your donations help us provide free services for charity, sustainable, and animal rescue projects. By donating crypto, you're directly contributing to a healthier, more sustainable world. Every donation you make goes towards supporting projects that aim to make a positive impact on the environment, animals, and communities in need. Together, we can build a better future, one donation at a time.</p>
+              <p>
+  <strong>Make a Difference with Your Crypto Donations</strong>  
+  Your <strong>crypto donations</strong> help fund <strong>charity, sustainability, and animal rescue projects</strong> worldwide.  
+  We use contributions to provide <strong>free branding, website development, and marketing support</strong> to impactful organizations.  
+  Whether you support with <strong>Bitcoin, Ethereum, Stablecoins, Utility Tokens, Security Tokens, Meme Coins, NFT Tokens, or Privacy Coins</strong>,  
+  your donation drives real change. <strong>Donate today and be part of a healthier world!</strong>  
+</p>
               <Button onClick={openPopup} className="btn nav-link">Donate Crypto</Button>
             </Col>
           </Row>
@@ -63,10 +69,14 @@ export default function Homesections() {
         <Container>
           <Row>
             <Col md={6} className="text-left align-self-center">
-              <h2>For Crypto Creators</h2>
-              <h4>Get more visibility and grow your crypto project with our free marketing and website services.</h4>
-              <p className="para">We believe in supporting new cryptocurrency projects by providing free marketing services to help you grow your community and increase visibility. Whether it’s designing a landing page or creating social media posts, we’re here to help you attract more visitors and spread the word about your coin.
-              Get the boost you need, at no cost to you, and encourage more people to join your crypto movement.</p>
+              <h2>For New Crypto Launchers</h2>
+              <h4>Get Free Marketing Support to Boost Your Crypto Project.</h4>
+              <p className=""><strong>Empowering New Crypto Projects & Charitable Causes with Free Services</strong>  
+  We support <strong>new cryptocurrency launchers</strong> by providing <strong>free marketing, branding, and website development</strong> services for  
+  <strong>Utility Tokens, Security Tokens, Stablecoins, Meme Coins, NFT Tokens, Privacy Coins</strong>, and more.  
+  Whether you're launching a new <strong>crypto coin or token</strong>, we help boost visibility, attract investors, and grow your community.  
+  Plus, we use <strong>crypto donations</strong> to offer <strong>complimentary services</strong> for <strong>charity, sustainability, and animal rescue projects</strong>,  
+  creating a healthier world through blockchain innovation. <strong>Join us today and make an impact with your crypto!</strong>  </p>
               <Link href="/crypto-Launchers" className="btn">Get Started</Link>
             </Col>
             <Col md={6} className="text-center">
