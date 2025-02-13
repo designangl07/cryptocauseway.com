@@ -59,7 +59,7 @@ const Header = ({ openPopup }) => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link href="/crypto-Launchers" className="nav-link" onClick={closeMenu}>
+              <Link href="/crypto-launchers" className="nav-link" onClick={closeMenu}>
               Launchers
               </Link>
             </li>
