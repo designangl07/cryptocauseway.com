@@ -59,6 +59,7 @@ export default function ClientLayout({ children }) {
         // If the page exists, render the default meta tags
         <>
           <meta name="robots" content="index, follow" />
+          <meta name="msvalidate.01" content="5DBE4CC04E10F62173EA469AA31EEDD4" />
           <meta name="google-site-verification" content="5a1lIHoY1OBn86f4qsWQzjGLZrbBSO1RSJXxw0ANjSw" />
           <link rel="canonical" href={canonicalUrl} />
         </>
