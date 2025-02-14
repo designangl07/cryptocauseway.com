@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './globals.css'; // Import global CSS
 import ClientLayout from './ClientLayout';
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from '@vercel/analytics/next';
 import Script from 'next/script';
 
 export default function RootLayout({ children }) {
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
         {/* Client Component for Header, Footer, and Popup */}
         <ClientLayout>
           {children}
+          <Analytics />
           <SpeedInsights />
         </ClientLayout>
       </body>
